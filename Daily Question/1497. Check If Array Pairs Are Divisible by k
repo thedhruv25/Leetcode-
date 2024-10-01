@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool canArrange(vector<int>& arr, int k) {
+        // Map to store the frequency of remainders when elements are divided by k
+        unordered_map<int,int> remainderMp;
+
+        // Step 1: Count the frequency of remainders
+        for(int i=0;i<arr.size();++i){
+            // Calculate the remainder of the current element when divided by k
+            int rem=arr[i] % k;
+// If remainder is negative (happens with negative numbers), adjust it to be positive
+            if(rem<0) rem=rem+k;
+    // Increment the frequency count of the calculated remainder
+
+            remainderMp[rem]++;
+        }
+        // Step 2: Verify if the remainders can form valid pairs
+        for(auto& [rem,count]  : remainderMp){
+ // Special case: remainder 0 can only pair with another remainder 0, so its count must be even
+            if(rem  == 0){
+                // Numbers with remainder 0 must have an even count
+                if(count % 2 != 0)
+                 return false;
+            }
+    // For other remainders, they must pair with their complement (k - rem)
+            else{
+     // The count of the current remainder must match the count of its complement
+                // For example, if remainder is 1, it must pair with remainder k-1
+                int complement=k-rem;
+                if(remainderMp[rem] != remainderMp[complement] ) return false;
+            }
+        }
+// If all conditions are satisfied, return true (the array can be arranged into valid pairs)
+        return true;
+    }
+};
